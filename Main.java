@@ -1,120 +1,26 @@
-package gitlet;
+package Core;
 
-/**
- * Driver class for Gitlet, the tiny stupid version-control system.
- *
- * @author Milgo Essa
+/** This is the main entry point for the program. This class simply parses
+ *  the command line inputs, and lets the byow.Core.Engine class take over
+ *  in either keyboard or input string mode.
  */
 public class Main {
-    /**
-     * Usage: java gitlet.Main ARGS, where ARGS contains
-     * <COMMAND> <OPERAND> ....
-     */
-    public static void main(String [] args) {
-
-        Repository r = new Repository();
-        int inputLength = args.length;
-        if (inputLength == 0) {
-            System.out.println("Please enter a command.");
-        } else {
-            switch (args[0]) {
-                case "init": {
-                    if (inputChecker(1, args)) {
-                        r.init();
-                    }
-                    break;
-                }
-                case "add": {
-                    if (inputChecker(2, args)) {
-                        r.add(args[1]);
-                    }
-                    break;
-                }
-                case "commit": {
-                    if (inputChecker(2, args)) {
-                        r.commitment(args[1]);
-                    }
-                    break;
-                }
-                case "rm": {
-                    if (inputChecker(2, args)) {
-                        r.rm(args[1]);
-                    }
-                    break;
-                }
-                case "log":
-                    if (inputChecker(1, args)) {
-                        r.log();
-                    }
-                    break;
-                case "global-log":
-                    if (inputChecker(1, args)) {
-                        r.global();
-                    }
-                    break;
-                case "find": {
-                    r.find(args[1]);
-                    break;
-                }
-                case "status": {
-                    if (inputChecker(1, args)) {
-                        r.status();
-                    }
-                    break;
-                }
-                case "checkout": {
-                    if (args.length != 2 && args.length != 3 && args.length != 4) {
-                        System.out.println("Incorrect Operands");
-                    } else if ((args.length == 4 && !args[2].equals("--"))
-                            || (args.length == 3 && !args[1].equals("--"))) {
-                        System.out.println("Incorrect Operands");
-                    } else {
-                        r.checkout(args);
-                    }
-                    break;
-                }
-                case "branch": {
-                    if (inputChecker(2, args)) {
-                        String branchName = args[1];
-                        r.branch(branchName);
-                    }
-                    break;
-                }
-                case "rm-branch": {
-                    if (inputChecker(2, args)) {
-                        String branchName = args[1];
-                        r.rmb(branchName);
-                    }
-                    break;
-                }
-                case "reset": {
-                    if (inputChecker(2, args)) {
-                        r.reset(args[1]);
-                    }
-                    break;
-                }
-
-                case "merge": {
-                    if (inputChecker(2, args)) {
-                        r.merge(args[1]);
-                    }
-                    break;
-                }
-
-                default:
-                    System.out.println("No command with that name exists.");
-            }
+    public static void main(String[] args) {
+        if (args.length > 2) {
+            System.out.println("Can only have two arguments - the flag and input string");
+            System.exit(0);
+        } else if (args.length == 2 && args[0].equals("-s")) {
+            Engine engine = new Engine();
+            engine.interactWithInputString(args[1]);
+            System.out.println(engine.toString());
+        // DO NOT CHANGE THESE LINES YET ;)
+        } else if (args.length == 2 && args[0].equals("-p")) {
+            System.out.println("Coming soon.");
         }
-        System.exit(0);
-    }
-
-
-    static boolean inputChecker(int length, String... args) {
-        if (args.length == length) {
-            return true;
+        // DO NOT CHANGE THESE LINES YET ;)
+        else {
+            Engine engine = new Engine();
+            engine.interactWithKeyboard();
         }
-        System.out.println("Incorrect Operands");
-        return false;
     }
-
 }
